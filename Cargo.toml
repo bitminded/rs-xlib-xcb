@@ -1,0 +1,12 @@
+[package]
+name = "xlib-xcb"
+version = "0.1.0"
+authors = [ "Michael Graf" ]
+
+[lib]
+name = "xlib_xcb"
+src = "src/lib.rs"
+
+[dependencies]
+xcb = { git = "https://github.com/bitminded/rs-xcb.git" }
+xlib = { git = "https://github.com/bitminded/rs-xlib.git" }

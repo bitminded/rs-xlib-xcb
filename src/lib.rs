@@ -8,11 +8,6 @@ struct XCBConnection {
     _private: *mut xcb::cdef::XCBConnection,
 }
 
-// only used for transmuting into xlib::Display
-struct Display {
-    _private: *mut xlib::cdef::Display,
-}
-
 /// Returns the XCB connection associated with an Xlib Display.
 ///
 /// # Parameters
@@ -27,10 +22,12 @@ struct Display {
 /// from the XCB library, in the same way as an XCB connection created with XCB.
 /// However, it probably is a good idea to use x_close_display instead of
 /// xcb_disconnect to disconnect from the X server.
-pub fn x_get_xcb_connection(display: &xlib::Display) -> xcb::XCBConnection {
+pub fn x_get_xcb_connection(
+    display: &mut xlib::DoNotFree<xlib::cdef::Display>,
+) -> xcb::XCBConnection {
     let connection = unsafe {
-        let display_transmute: &Display = std::mem::transmute(display);
-        cdef::XGetXCBConnection(display_transmute._private)
+        let display = &mut **display as *mut xlib::cdef::Display;
+        cdef::XGetXCBConnection(display)
     };
 
     return unsafe {

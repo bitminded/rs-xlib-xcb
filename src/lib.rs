@@ -22,11 +22,9 @@ struct XCBConnection {
 /// from the XCB library, in the same way as an XCB connection created with XCB.
 /// However, it probably is a good idea to use x_close_display instead of
 /// xcb_disconnect to disconnect from the X server.
-pub fn x_get_xcb_connection(
-    display: &mut xlib::DoNotFree<xlib::cdef::Display>,
-) -> xcb::XCBConnection {
+pub fn x_get_xcb_connection(display: &xlib::DoNotFree<xlib::cdef::Display>) -> xcb::XCBConnection {
     let connection = unsafe {
-        let display = &mut **display as *mut xlib::cdef::Display;
+        let display = &**display as *const xlib::cdef::Display as *mut xlib::cdef::Display;
         cdef::XGetXCBConnection(display)
     };
 
